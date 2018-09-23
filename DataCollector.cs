@@ -207,16 +207,16 @@ namespace mwgc
 		{
 			string xname = Compiler.Options["xname"];
 			string result = xname + "_" + precompileName;
-			return result.ToUpper();
+			return result.ToUpper(new CultureInfo("en-US", false));
 		}
 
 		private string ResolveRealName(string precompileName)
 		{
-			string xname = Compiler.Options["xname"].ToUpper();
+			string xname = Compiler.Options["xname"].ToUpper(new CultureInfo("en-US", false));
 			string result = precompileName;
 			if (precompileName.StartsWith("x_"))
 				result = xname + precompileName.Substring(1);
-			return result.ToUpper();
+			return result.ToUpper(new CultureInfo("en-US", false));
 		}
 
 
@@ -251,13 +251,25 @@ namespace mwgc
 
 
 			ArrayList mountPointObjects = new ArrayList();
-			//ArrayList transparentObjects = new ArrayList(new string[] {"base_a","kit00_front_window_a","kit00_left_headlight_a"});
-			ArrayList transparentObjects = new ArrayList();
+            ArrayList kit00mountPointObjects = new ArrayList();
+            ArrayList kit01mountPointObjects = new ArrayList();
+            ArrayList kit02mountPointObjects = new ArrayList();
+            ArrayList kit03mountPointObjects = new ArrayList();
+            ArrayList kit04mountPointObjects = new ArrayList();
+            ArrayList kit05mountPointObjects = new ArrayList();
+            //ArrayList transparentObjects = new ArrayList(new string[] {"base_a","kit00_front_window_a","kit00_left_headlight_a"});
+            ArrayList transparentObjects = new ArrayList();
 			int diffuse;
 
 			ArrayList basePartObjects = new ArrayList();
+            ArrayList kit00bodyPartObjects = new ArrayList();
+            ArrayList kit01bodyPartObjects = new ArrayList();
+            ArrayList kit02bodyPartObjects = new ArrayList();
+            ArrayList kit03bodyPartObjects = new ArrayList();
+            ArrayList kit04bodyPartObjects = new ArrayList();
+            ArrayList kit05bodyPartObjects = new ArrayList();
 
-			for (int i=0; i<rawGeom.Header.NumObjects; i++)
+            for (int i=0; i<rawGeom.Header.NumObjects; i++)
 			{
 				Compiler.VerboseOutput(string.Format("Compiling object {0}: {1}", i+1, rawGeom.Header.ObjHeaders[i].ObjName));
 				
@@ -265,7 +277,7 @@ namespace mwgc
 				{
 					string mountName;
 					uint mountHash;
-					mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(1).ToUpper();
+					mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(1).ToUpper(new CultureInfo("en-US", false));
 					if (mountName.IndexOf("[") > -1)
 					{
 						mountName = mountName.Substring(0, mountName.IndexOf("["));
@@ -290,8 +302,188 @@ namespace mwgc
 					mp.Transform.m[14] = transform[13]; //y
 
                     mountPointObjects.Add(mp);
-				} 
-				else
+				}
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("0#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit00mountPointObjects.Add(mp);
+                }
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("1#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit01mountPointObjects.Add(mp);
+                }
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("2#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit02mountPointObjects.Add(mp);
+                }
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("3#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit03mountPointObjects.Add(mp);
+                }
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("4#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit04mountPointObjects.Add(mp);
+                }
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("5#"))
+                {
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(2).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(3), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
+                    RealMountPoint mp = new RealMountPoint();
+                    mp.Hash = mountHash;
+                    mp.Transform = new RealMatrix();
+                    mp.Transform.m = new float[16];
+                    float[] transform = rawGeom.Header.ObjHeaders[i].Transform;
+                    mp.Transform.m[0] = 1.0f;
+                    mp.Transform.m[5] = 1.0f;
+                    mp.Transform.m[10] = 1.0f;
+                    mp.Transform.m[15] = 1.0f;
+                    mp.Transform.m[12] = transform[14]; //z
+                    mp.Transform.m[13] = transform[12]; //x
+                    mp.Transform.m[14] = transform[13]; //y
+
+                    kit05mountPointObjects.Add(mp);
+                }
+                else
 				{
 					Hashtable subMeshes = new Hashtable();
 					UniqueList textures = new UniqueList();
@@ -428,10 +620,28 @@ namespace mwgc
 					RealVector4 boundsMin;
 					RealVector4 boundsMax;
 
-					if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper().StartsWith("BASE_"))
+					if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("BASE_")) // May be CARNAME_BASE_A or KITxx_BASE_A
 						basePartObjects.Add(part);
 
-					string resolvedName = ResolveRealNameForce(rawGeom.Header.ObjHeaders[i].ObjName.Data);
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT00_BODY_")) // Stock body kit
+                        kit00bodyPartObjects.Add(part);
+
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT01_BODY_")) // Body 1
+                        kit01bodyPartObjects.Add(part);
+
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT02_BODY_")) // Body 2
+                        kit02bodyPartObjects.Add(part);
+
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT03_BODY_")) // Body 3
+                        kit03bodyPartObjects.Add(part);
+
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT04_BODY_")) // Body 4
+                        kit04bodyPartObjects.Add(part);
+
+                    if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT05_BODY_")) // Body 5
+                        kit05bodyPartObjects.Add(part);
+
+                    string resolvedName = ResolveRealNameForce(rawGeom.Header.ObjHeaders[i].ObjName.Data);
 
 					part.PartInfo.Hash = RealHash(resolvedName);
 					part.PartInfo.PartName = new FixedLenString(resolvedName);
@@ -627,10 +837,131 @@ namespace mwgc
 						part.PartInfo.MountPoints = mountPoints;
 					}
 				}
-				Compiler.VerboseOutput(" + Complete.");	
+                
+                Compiler.VerboseOutput(" + Complete.");	
 			}
 
-			Compiler.VerboseOutput("Collecting part cross links...");
+            if (kit00mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 00 body parts...");
+                if (kit00bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 00 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit00mountPointObjects.Count];
+                    kit00mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit00bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+
+            if (kit01mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 01 body parts...");
+                if (kit01bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 01 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit01mountPointObjects.Count];
+                    kit01mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit01bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+
+            if (kit02mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 02 body parts...");
+                if (kit02bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 02 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit02mountPointObjects.Count];
+                    kit02mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit02bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+
+            if (kit03mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 03 body parts...");
+                if (kit03bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 03 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit03mountPointObjects.Count];
+                    kit03mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit03bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+
+            if (kit04mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 04 body parts...");
+                if (kit04bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 04 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit04mountPointObjects.Count];
+                    kit04mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit04bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+
+            if (kit05mountPointObjects.Count > 0)
+            {
+                Compiler.VerboseOutput("Merging mount points into kit 05 body parts...");
+                if (kit05bodyPartObjects.Count == 0)
+                {
+                    Compiler.WarningOutput("Mount points provided without any kit 05 body parts! Ignoring mount points.");
+                }
+                else
+                {
+                    RealMountPoint[] mountPoints = new RealMountPoint[kit05mountPointObjects.Count];
+                    kit05mountPointObjects.CopyTo(mountPoints);
+                    foreach (RealGeometryPart part in kit05bodyPartObjects)
+                    {
+                        part.PartInfo.MountPoints = mountPoints;
+                    }
+                }
+
+                Compiler.VerboseOutput(" + Complete.");
+            }
+            
+            Compiler.VerboseOutput("Collecting part cross links...");
 			LoadCrossLinks(geom);
 
 			geom.GeometryInfo.PartCount = geom.PartCount;
@@ -699,7 +1030,7 @@ namespace mwgc
 				{
 					string mountName;
 					uint mountHash;
-					mountName = aseFile[i].Name.Substring(1).ToUpper();
+					mountName = aseFile[i].Name.Substring(1).ToUpper(new CultureInfo("en-US", false));
 					if (mountName.IndexOf("[") > -1)
 					{
 						mountName = mountName.Substring(0, mountName.IndexOf("["));
@@ -855,7 +1186,7 @@ namespace mwgc
 					RealVector4 boundsMin;
 					RealVector4 boundsMax;
 
-					if (aseFile[i].Name.ToUpper().StartsWith("BASE_"))
+					if (aseFile[i].Name.ToUpper(new CultureInfo("en-US", false)).StartsWith("BASE_"))
 						basePartObjects.Add(part);
 
 					string resolvedName = ResolveRealNameForce(aseFile[i].Name);
