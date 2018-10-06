@@ -311,7 +311,72 @@ namespace mwgc.RealEngine
 				writer.Write(m[i]);
 		}
 
-	}
+        public void MakeSingle()
+        {
+            m[0] = 1; m[1] = 0; m[2] = 0; m[3] = 0;
+            m[4] = 0; m[5] = 1; m[6] = 0; m[7] = 0;
+            m[8] = 0; m[9] = 0; m[10] = 1; m[11] = 0;
+        }
+
+        public void MultMatrix4f(float[] m1, float[] m2)
+        {
+            float[] Result = new float[16];           //safe not to initialize
+                                        /*  ( 0  1  2)		 ( 0  1  2)
+                                            ( 4  5  6)   *   ( 4  5  6)
+                                            ( 8  9 10)       ( 8  9 10)
+                                        */
+            Array.Copy(m1, Result, 16);
+
+            Result[0] = m1[0] * m2[0] + m1[1] * m2[4] + m1[2] * m2[8];
+            Result[1] = m1[0] * m2[1] + m1[1] * m2[5] + m1[2] * m2[9];
+            Result[2] = m1[0] * m2[2] + m1[1] * m2[6] + m1[2] * m2[10];
+
+            Result[4] = m1[4] * m2[0] + m1[5] * m2[4] + m1[6] * m2[8];
+            Result[5] = m1[4] * m2[1] + m1[5] * m2[5] + m1[6] * m2[9];
+            Result[6] = m1[4] * m2[2] + m1[5] * m2[6] + m1[6] * m2[10];
+
+            Result[8] = m1[8] * m2[0] + m1[9] * m2[4] + m1[10] * m2[8];
+            Result[9] = m1[8] * m2[1] + m1[9] * m2[5] + m1[10] * m2[9];
+            Result[10] = m1[8] * m2[2] + m1[9] * m2[6] + m1[10] * m2[10];
+
+            Array.Copy(Result, m1, 16);
+        }
+
+        public void Rotate(float XAngle, float YAngle, float ZAngle)
+        {
+            MakeSingle();
+            float k = 0.0174f;
+
+            float[] Y = new float[16];
+            float[] Z = new float[16];
+
+            Array.Copy(m, Y, 16);
+            Array.Copy(m, Z, 16);
+
+            //Rotate X
+            m[5] = (float)Math.Cos(XAngle * k);
+            m[6] = (float)Math.Sin(XAngle * k);
+            m[9] = (float)Math.Sin(XAngle * k) * -1.0f;
+            m[10] = (float)Math.Cos(XAngle * k);
+
+            //Rotate Y
+            Y[0] = (float)Math.Cos(YAngle * k);
+            Y[2] = (float)Math.Sin(YAngle * k) * -1.0f;
+            Y[8] = (float)Math.Sin(YAngle * k);
+            Y[10] = (float)Math.Cos(YAngle * k);
+
+            MultMatrix4f(m, Y);
+
+            //Rotate Z
+            Z[0] = (float)Math.Cos(ZAngle * k);
+            Z[1] = (float)Math.Sin(ZAngle * k);
+            Z[4] = (float)Math.Sin(ZAngle * k) * -1.0f;
+            Z[5] = (float)Math.Cos(ZAngle * k);
+
+            MultMatrix4f(m, Z);
+        }
+
+    }
 
 	public struct RealVertex
 	{

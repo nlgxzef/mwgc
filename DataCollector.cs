@@ -218,10 +218,8 @@ namespace mwgc
 				result = xname + precompileName.Substring(1);
 			return result.ToUpper(new CultureInfo("en-US", false));
 		}
-
-
-
-		public RealGeometryFile Collect(RawGeometryFile rawGeom)
+        
+        public RealGeometryFile Collect(RawGeometryFile rawGeom)
 		{
 			RealGeometryFile geom = new RealGeometryFile();
 			Hashtable MatTex = new Hashtable();
@@ -301,6 +299,23 @@ namespace mwgc
 					mp.Transform.m[13] = transform[12]; //x
 					mp.Transform.m[14] = transform[13]; //y
 
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
+
                     mountPointObjects.Add(mp);
 				}
                 else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("0#"))
@@ -330,6 +345,23 @@ namespace mwgc
                     mp.Transform.m[12] = transform[14]; //z
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
+
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
 
                     kit00mountPointObjects.Add(mp);
                 }
@@ -361,6 +393,23 @@ namespace mwgc
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
 
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
+
                     kit01mountPointObjects.Add(mp);
                 }
                 else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("2#"))
@@ -390,6 +439,23 @@ namespace mwgc
                     mp.Transform.m[12] = transform[14]; //z
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
+
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
 
                     kit02mountPointObjects.Add(mp);
                 }
@@ -421,6 +487,23 @@ namespace mwgc
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
 
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
+
                     kit03mountPointObjects.Add(mp);
                 }
                 else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("4#"))
@@ -451,6 +534,23 @@ namespace mwgc
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
 
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                         || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
+
                     kit04mountPointObjects.Add(mp);
                 }
                 else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("5#"))
@@ -480,6 +580,23 @@ namespace mwgc
                     mp.Transform.m[12] = transform[14]; //z
                     mp.Transform.m[13] = transform[12]; //x
                     mp.Transform.m[14] = transform[13]; //y
+
+                    if (mp.Hash == RealHash("LEFT_HEADLIGHT")
+                        || mp.Hash == RealHash("RIGHT_HEADLIGHT"))
+                    {
+                        mp.Transform.Rotate(0.0f, 90.0f, 0.0f);
+                    }
+
+                    if (mp.Hash == RealHash("LEFT_BRAKELIGHT")
+                        || mp.Hash == RealHash("RIGHT_BRAKELIGHT")
+                        || mp.Hash == RealHash("CENTRE_BRAKELIGHT")
+                        || mp.Hash == RealHash("LEFT_REVERSE")
+                        || mp.Hash == RealHash("RIGHT_REVERSE")
+                        || mp.Hash == RealHash("LEFT_EXHAUST")
+                        || mp.Hash == RealHash("RIGHT_EXHAUST"))
+                    {
+                        mp.Transform.Rotate(0.0f, -90.0f, 0.0f);
+                    }
 
                     kit05mountPointObjects.Add(mp);
                 }

@@ -17,9 +17,10 @@ namespace mwgc
 			Assembly asm = Assembly.GetExecutingAssembly();
 			AssemblyName asmName = asm.GetName();
 			
-			Console.WriteLine("NFS:MW Geometry Compiler (mwgc) " + asmName.Version.ToString());
+			Console.WriteLine("NFS:MW Geometry Compiler (mwgc) " + asmName.Version.ToString() + " (Custom Version)");
 			Console.WriteLine("Copyright(C) 2005 - 2006, AruTec Inc. (Arushan), All Rights Reserved.");
-			Console.WriteLine("Contact: oneforaru at gmail dot com (bug reports only)");
+            Console.WriteLine("Copyright(C) 2018 nlgzrgn.");
+            Console.WriteLine("Contact: oneforaru at gmail dot com (bug reports only), nlgzrgn#7138 at Discord");
 			Console.WriteLine();
 			Console.WriteLine("Disclaimer: This program is provided as is without any warranties of any kind.");
 			//Console.WriteLine("            All reverse-engineering performed to develop this software was done");
