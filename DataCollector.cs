@@ -206,8 +206,8 @@ namespace mwgc
 		private string ResolveRealNameForce(string precompileName)
 		{
 			string xname = Compiler.Options["xname"];
-			string result = xname + "_" + precompileName;
-			return result.ToUpper(new CultureInfo("en-US", false));
+            string result = String.IsNullOrEmpty(xname) ? precompileName : (xname + "_" + precompileName);
+            return result.ToUpper(new CultureInfo("en-US", false));
 		}
 
 		private string ResolveRealName(string precompileName)
@@ -271,20 +271,21 @@ namespace mwgc
 			{
 				Compiler.VerboseOutput(string.Format("Compiling object {0}: {1}", i+1, rawGeom.Header.ObjHeaders[i].ObjName));
 				
-				if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("#"))
+				if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("#")) // Arushan style mount points
 				{
-					string mountName;
-					uint mountHash;
-					mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(1).ToUpper(new CultureInfo("en-US", false));
-					if (mountName.IndexOf("[") > -1)
-					{
-						mountName = mountName.Substring(0, mountName.IndexOf("["));
-					}
-					if (mountName.StartsWith("0x"))
-						mountHash = uint.Parse(mountName.Substring(2), NumberStyles.HexNumber);
-					else
-						mountHash = RealHash(mountName);
-					Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
+                    string mountName;
+                    uint mountHash;
+                    mountName = rawGeom.Header.ObjHeaders[i].ObjName.Data.Substring(1).ToUpper(new CultureInfo("en-US", false));
+                    if (mountName.IndexOf("[") > -1)
+                    {
+                        mountName = mountName.Substring(0, mountName.IndexOf("["));
+                    }
+                    if (mountName.StartsWith("0x"))
+                        mountHash = uint.Parse(mountName.Substring(2), NumberStyles.HexNumber);
+                    else
+                        mountHash = RealHash(mountName);
+
+                    Compiler.VerboseOutput(string.Format(" + Mount Point Name: {0}", mountName));
 					Compiler.VerboseOutput(string.Format(" + Compiled Hash: 0x{0:x}", mountHash));
                     RealMountPoint mp = new RealMountPoint();
 					mp.Hash = mountHash;
@@ -318,7 +319,7 @@ namespace mwgc
 
                     mountPointObjects.Add(mp);
 				}
-                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("0#"))
+                else if (rawGeom.Header.ObjHeaders[i].ObjName.Data.StartsWith("0#")) // nlgzrgn Style body kit mount points
                 {
                     string mountName;
                     uint mountHash;
@@ -737,7 +738,7 @@ namespace mwgc
 					RealVector4 boundsMin;
 					RealVector4 boundsMax;
 
-					if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("BASE_")) // May be CARNAME_BASE_A or KITxx_BASE_A
+					if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("BASE_") && !(rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("UNIVERSAL_SPOILER"))) // May be CARNAME_BASE_A or BASE_A
 						basePartObjects.Add(part);
 
                     if (rawGeom.Header.ObjHeaders[i].ObjName.Data.ToUpper(new CultureInfo("en-US", false)).Contains("KIT00_BODY_")) // Stock body kit
@@ -957,7 +958,7 @@ namespace mwgc
                 
                 Compiler.VerboseOutput(" + Complete.");	
 			}
-
+            
             if (kit00mountPointObjects.Count > 0)
             {
                 Compiler.VerboseOutput("Merging mount points into kit 00 body parts...");

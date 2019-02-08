@@ -449,6 +449,7 @@ namespace mwgc.RealEngine
 		public int Null2;
 		public int Null3;
 		public RealMatrix Transform;
+        public String AttachTo;
 		
 		public void Read(BinaryReader reader) 
 		{
